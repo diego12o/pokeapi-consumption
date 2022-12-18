@@ -1,4 +1,4 @@
-import requests
+import requests, json
 
 def get_last_pokemon(evolves_to, no_evolution_pokemon, less_weight_name, less_weight):
     # GET LAST POKEMON FROM EVOLUTION TREE
@@ -63,9 +63,10 @@ def tree_evolution(data, no_evolution_pokemon, less_weight_name, less_weight):
 
         return no_evolution_pokemon, less_weight_name, less_weight
 
-    get_last_pokemon(evolves_to, no_evolution_pokemon, less_weight_name, less_weight)
+    no_evolution_pokemon, less_weight_name, less_weight = get_last_pokemon(evolves_to, no_evolution_pokemon, less_weight_name, less_weight)
+    return no_evolution_pokemon, less_weight_name, less_weight
     
-
+# PRINCIPAL FUNCTION
 def get_no_evolution_pokemon():
     # URL DEFINITION
     url_evolution = "https://pokeapi.co/api/v2/evolution-chain/?limit=50"
@@ -73,7 +74,7 @@ def get_no_evolution_pokemon():
     # SOLUTION VARIABLES
     no_evolution_pokemon = []
     less_weight_name = ""
-    less_weight = 0
+    less_weight = 1000
 
     next = True
 
@@ -91,7 +92,7 @@ def get_no_evolution_pokemon():
             response = requests.get(url['url'])
             data = response.json()
 
-            tree_evolution(data, no_evolution_pokemon, less_weight_name, less_weight)
+            no_evolution_pokemon, less_weight_name, less_weight = tree_evolution(data, no_evolution_pokemon, less_weight_name, less_weight)
 
     solution = {
         "no_evolution_pokemon": no_evolution_pokemon,
@@ -100,5 +101,8 @@ def get_no_evolution_pokemon():
             "weight": less_weight
         }
     }
+
+    with open('solution.json', 'w') as file:
+        json.dump(solution, file, indent=4)
 
 get_no_evolution_pokemon()
