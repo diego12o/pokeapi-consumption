@@ -12,4 +12,4 @@ def get_solution():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(host='10.182.0.2', port=5000)
+    app.run(host='0.0.0.0', port=5000)
